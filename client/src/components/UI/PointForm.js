@@ -38,7 +38,7 @@ export default class PointForm {
         {
           field: 'radius',
           label: 'Радиус:',
-          validation: Helpers.getValidationRulesForNumericInput(),
+          validation: Helpers.getValidationRulesForNumericInput(1, STAGE_HEIGHT / 2),
         },
       ],
     }];
