@@ -1,0 +1,11 @@
+export const API_URL = "https://localhost:7134/api";
+export const STAGE_HEIGHT = 600;
+export const STAGE_WIDTH = 1130;
+export const COMMENT_WIDTH = 100;
+export const COMMENT_FONT_FAMILY = 'calibri';
+export const COMMENT_FONT_SIZE = 18;
+export const COMMENT_TEXT_COLOR = "#000";
+export const OUTLINE_COMMENT_TEXT_COLOR = "#000";
+export const TEXT_PADDING = 0;
+export const TEXT_ALIGN = "center";
+export const RECT_STROKE_WIDTH = 1;
