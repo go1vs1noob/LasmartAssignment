@@ -8,7 +8,7 @@ using server.Models.DTOs;
 namespace server.Controllers;
 [ApiController]
 [Route("api/[controller]")]
-public class CommentsController: ControllerBase
+public class CommentsController : ControllerBase
 {
     private readonly PointContext _pointContext;
     public CommentsController(PointContext pointContext)
@@ -22,7 +22,7 @@ public class CommentsController: ControllerBase
             .Comments
             .Include(c => c.Point)
             .ToListAsync();
-    } 
+    }
     [HttpGet("{id}")]
     public async Task<ActionResult<Comment>> GetCommentById(int id)
     {
@@ -32,7 +32,7 @@ public class CommentsController: ControllerBase
             .FirstOrDefaultAsync(c => c.Id == id);
         if (comment == null)
         {
-            return BadRequest();
+            return NotFound();
         }
         return Ok(comment);
     }
@@ -49,7 +49,7 @@ public class CommentsController: ControllerBase
                                         .FirstOrDefaultAsync(p => p.Id == commentDto.PointId);
         if (pointForComment == null)
         {
-            return BadRequest();
+            return NotFound();
         }
         Comment comment = new Comment()
         {
@@ -58,7 +58,7 @@ public class CommentsController: ControllerBase
             PointId = commentDto.PointId,
             Point = pointForComment
         };
-        
+
         pointForComment.Comments.Add(comment);
         await _pointContext.Comments.AddAsync(comment);
         await _pointContext.SaveChangesAsync();
@@ -75,22 +75,22 @@ public class CommentsController: ControllerBase
         Comment? commentToDelete = await _pointContext
                                     .Comments
                                     .FirstOrDefaultAsync(c => c.Id == id);
-        
+
 
         if (commentToDelete == null)
         {
-            return BadRequest();
+            return NotFound();
         }
-		Point? point = await _pointContext
-			.Points
-			.Include(p => p.Comments)
-			.FirstOrDefaultAsync(p => p.Comments.Contains(commentToDelete));
+        Point? point = await _pointContext
+            .Points
+            .Include(p => p.Comments)
+            .FirstOrDefaultAsync(p => p.Comments.Contains(commentToDelete));
         if (point != null)
         {
             point.Comments.Remove(commentToDelete);
         }
 
-		_pointContext.Comments.Remove(commentToDelete);
+        _pointContext.Comments.Remove(commentToDelete);
         await _pointContext.SaveChangesAsync();
         return Ok(commentToDelete.Id);
     }

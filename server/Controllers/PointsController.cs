@@ -7,7 +7,7 @@ using server.Models.DTOs;
 namespace server.Controllers;
 [ApiController]
 [Route("api/[controller]")]
-public class PointsController: ControllerBase
+public class PointsController : ControllerBase
 {
     private readonly PointContext _pointContext;
     public PointsController(PointContext pointContext)
@@ -21,8 +21,8 @@ public class PointsController: ControllerBase
             .Points
             .Include(p => p.Comments)
             .ToListAsync();
-    } 
-    
+    }
+
     [HttpGet("{id}")]
     public async Task<ActionResult<Point>> GetPoint(int id)
     {
@@ -44,7 +44,7 @@ public class PointsController: ControllerBase
         {
             return BadRequest();
         }
-        
+
         Point point = new Point()
         {
             X = pointDto.X,
@@ -52,7 +52,7 @@ public class PointsController: ControllerBase
             Radius = pointDto.Radius,
             ColorHex = pointDto.ColorHex,
         };
-        
+
         await _pointContext.AddAsync(point);
         await _pointContext.SaveChangesAsync();
 
@@ -63,13 +63,13 @@ public class PointsController: ControllerBase
     {
         if (!ModelState.IsValid)
         {
-			return BadRequest();
-		}
+            return BadRequest();
+        }
         Point? point = await _pointContext.Points.FirstOrDefaultAsync(p => p.Id == pointDto.Id);
         if (point == null)
         {
-			return NotFound();
-		}
+            return NotFound();
+        }
         point.X = pointDto.X;
         point.Y = pointDto.Y;
         _pointContext.Points.Update(point);
@@ -91,9 +91,9 @@ public class PointsController: ControllerBase
                                .FirstOrDefaultAsync(p => p.Id == id);
         if (pointToDelete == null)
         {
-            return BadRequest();
+            return NotFound();
         }
-        
+
         foreach (var comment in pointToDelete.Comments)
         {
             _pointContext.Comments.Remove(comment);
